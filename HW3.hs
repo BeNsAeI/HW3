@@ -71,10 +71,6 @@ rank []     x | x >= 0            = Just x
 rank (fst:list) x | eq >= 0 = rank list (eq + additions)
               where (subtracts, additions) = rankC fst
                     eq        = x - subtracts
-					{-
-rank (fst:list) x | eq >= 0       = rank list (eq+additions)
-                                       where (subtracts, additions) = rankC fst
-                                       eq   = x - subtracts -}
 rank _ _                         = Nothing
 
 
