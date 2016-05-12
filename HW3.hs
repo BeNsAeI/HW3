@@ -116,11 +116,10 @@ bbox (TD a b) | ax >= bx       = (ax, ay + by) {-TD adds the heights (because it
               | ax < bx        = (bx, ay + by)  {-same as last one except if the b is the bigger box in length-}
                                   where (ax, ay) = bbox a
                                         (bx, by) = bbox b
-bbox (LR a b)
-    | iy >= jy = (ix + jx, iy)
-    | iy < jy = (ix + jx, jy)
-    where (ix, iy) = bbox a
-          (jx, jy) = bbox b
+bbox (LR a b) | ay >= by       = (ax + bx, ay)
+              | ay < by        = (ax + bx, by)
+                                  where (ax, ay) = bbox a
+                                        (bx, by) = bbox b
 bbox X = (1, 1)
 
 {- (b) Define a type checker for the shape language that assigns
@@ -131,18 +130,18 @@ rect X = Just (1, 1)
 rect (TD a b) =            -- widths must match, and bbox has that width and 
     case rect a of         -- its height is sum of heights. Else Nothing.
         Nothing -> Nothing
-        Just (ix, iy) -> case rect b of 
+        Just (ax, ay) -> case rect b of 
                          Nothing -> Nothing
-                         Just (jx, jy) -> case (ix == jx) of
-                                          True -> Just (ix, iy + jy)
+                         Just (bx, by) -> case (ax == bx) of
+                                          True -> Just (ax, ay + by)
                                           False -> Nothing
 rect (LR a b) =            -- heights must match, and bbox is that height
     case rect a of         -- with width the sum of widths. Else Nothing.
         Nothing -> Nothing
-        Just (ix, iy) -> case rect b of 
+        Just (ax, ay) -> case rect b of 
                          Nothing -> Nothing
-                         Just (jx, jy) -> case (iy == jy) of
-                                          True -> Just (ix + jx, iy)
+                         Just (bx, by) -> case (ay == by) of
+                                          True -> Just (ax + bx, ay)
                                           False -> Nothing
 
 -- Test Shapes
