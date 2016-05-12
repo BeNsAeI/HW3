@@ -21,26 +21,38 @@ data Cmd = LD Int
          | SWAP
          | POP Int
 
+
+
+
+{-Declearing the stack and double stack shortcut-}
 type Stack = [Int]
-type D = Stack -> Stack
+type DblStk = Stack -> Stack
 
 type Rank = Int
 type CmdRank = (Int, Int)
 
 
 -- Semantics of individual Commands
-semCmd :: Cmd -> D
-semCmd (LD a)  xs         = [a] ++ xs
-semCmd (ADD)   (x1:x2:xs) = [x1+x2] ++ xs
-semCmd (MULT)  (x1:x2:xs) = [x1*x2] ++ xs
-semCmd (DUP)   (x1:xs)    = [x1,x1] ++ xs
-semCmd (INC)   (x1:xs)    = [succ x1] ++ xs
-semCmd (SWAP)  (x1:x2:xs) = (x2:x1:xs)
-semCmd (POP n) xs         = drop n xs
+semCmd :: Cmd -> DblStk
+{-LD adds the element x to the front of List-}
+semCmd (LD x)  list         = [x] ++ list
+{-add puts the result of addition of the two top elements in the stackk to the top of the stack-}
+semCmd (ADD) (x0:x1:list)   = [x0+x1] ++ list
+{-add puts the result of multiplication of the two top elements in the stackk to the top of the stack-}
+semCmd (MULT) (x0:x1:list)  = [x0*x1] ++ list
+{-Duplicates the first element of the list (note, since the list variable does not include the the x0 we need it again-}
+semCmd (DUP) (x0:list)      = [x0,x0] ++ list
+{-increment the top by one and then add it to the list-}
+semCmd (INC) (x0:list)      = [succ x0] ++ list
+{-swap , swaps the two first elements of the list-}
+semCmd (SWAP) (x0:x1:list)  = (x1:x0:list)
+{-drop function removes an element from a list-}
+semCmd (POP x) list         = drop x list
+{-Epty list for everything else-}
 semCmd _       _          = []
 
 -- Semantics of a Program
-sem :: Prog -> D
+sem :: Prog -> DblStk
 sem [] a = a
 sem (x:xs) a = sem xs (semCmd x a)
 
@@ -83,8 +95,8 @@ semStatTC p | typeSafe p = A (sem p [])
       function definition be simplified to have this type?
 
   Answer:
-       The new type of sem is 'Prog -> D' where type D = Stack -> Stack.
-       type D can be simplified to no longer contain Maybe Stacks,
+       The new type of sem is 'Prog -> D' where type DblStk = Stack -> Stack.
+       type DblStk can be simplified to no longer contain Maybe Stacks,
        because the type checker handles all TypeErrors.
 -}
 
