@@ -106,7 +106,7 @@ data Shape = X
            | LR Shape Shape
            deriving Show
 
-		{-(Width, Height)-}
+       {-(Width, Height)-}
 type BBox = (Int, Int)
 
 {---------------------------}
