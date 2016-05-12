@@ -88,7 +88,6 @@ typeSafe p = (rankP p) /= Nothing
 semStatTC :: Prog -> Type
 semStatTC x | typeSafe x = A (sem x [])
             | otherwise  = TypeError
-              deriving Show
 
 {-
 What is the new type of the function sem and why can the function definition be simplified to have this type?
