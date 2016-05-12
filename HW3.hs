@@ -20,6 +20,7 @@ data Cmd = LD Int
          | INC
          | SWAP
          | POP Int
+		 deriving Show
 
 
 
