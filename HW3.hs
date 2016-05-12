@@ -68,9 +68,9 @@ rankP list = rank list 0
 type RnkType = Prog -> Rank -> Maybe Rank
 rank :: RnkType
 rank []     x | x >= 0            = Just x
-rank (fst:list) r | under >= 0 = rank list (under+adds)
+rank (fst:list) x | under >= 0 = rank list (under+adds)
               where (subs, adds) = rankC fst
-                    under        = r - subs
+                    under        = x - subs
 					{-
 rank (fst:list) x | eq >= 0       = rank list (eq+additions)
                                        where (subtracts, additions) = rankC fst
