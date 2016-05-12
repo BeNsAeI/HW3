@@ -1,15 +1,18 @@
-{- Authors:
-     Trevor Bramwell
-     Emily  Dunham
-     Daniel Reichert
+{- 
+- Behnam Saeedi
+- Saeedib
+- 932217697
+- Homework 3
+- Types
+- Due 5/12/2016
 -}
 
-module Homework3 where
+module HW3 where
 
-{----------------------- Exercise 1 -------------------------}
+{-Q1-}
 
+{-Code provided by the assignment:-}
 type Prog = [Cmd]
-
 data Cmd = LD Int
          | ADD
          | MULT
@@ -17,7 +20,6 @@ data Cmd = LD Int
          | INC
          | SWAP
          | POP Int
-         deriving Show
 
 type Stack = [Int]
 type D = Stack -> Stack
@@ -67,7 +69,7 @@ rank _      _ = Nothing
 
 {--- Part (b) ---}
 
-data Type = A Stack | TypeError deriving Show
+data Type = A Stack | TypeError 
 
 typeSafe :: Prog -> Bool
 typeSafe p = (rankP p) /= Nothing
@@ -99,7 +101,6 @@ p6 = [POP 1] -- TypeError
 data Shape = X
            | TD Shape Shape
            | LR Shape Shape
-           deriving Show
 
 type BBox = (Int, Int) -- (width, height) of bounding box
 
