@@ -166,7 +166,7 @@ r5 = LR r4 r4 -- bbox (8, 4), rect Just (8, 4)
 {-
 
 (a) Consider the functions f and g, which are given by the
-    following two function definitions.  -}
+    following two function definitions.  
 
 f x y = if null x then [y] else x
 g x y = if not (null x) then [] else [y]
@@ -198,7 +198,7 @@ g x y = if not (null x) then [] else [y]
 
 
 (b) Find a (simple) definition for a function h that has the
-      following type. -}
+      following type.
 
 h :: [b] -> [(a, b)] -> [b]
 h b _ = b
