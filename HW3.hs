@@ -97,37 +97,31 @@ type of sem is: Prog -> Stack -> Stack
 since we have a type checker , we do not need to worry about Maybe type anymore (it is taken care of by the typechecker)
 -}
 
-p1 = [LD 3, DUP, ADD, LD 5, SWAP] -- A [6, 5]
-p2 = [LD 8, POP 1, LD 3, DUP, POP 2, LD 4] -- A [4]
-p3 = [LD 3, LD 4, LD 5, MULT, ADD] -- A [23]
-p4 = [LD 2, ADD] -- TypeError
-p5 = [DUP] -- TypeError
-p6 = [POP 1] -- TypeError
-
-
-
 {---------------------------------------------------------------------------------------------------}
 {-Q2-}
+
+{-This code is provided in the assignment:-}
 data Shape = X
            | TD Shape Shape
            | LR Shape Shape
            deriving Show
 
-type BBox = (Int, Int) -- (width, height) of bounding box
+		{-(Width, Height)-}
+type BBox = (Int, Int)
 
-{- (a) Define a type checker for the shape language -}
---
+{---------------------------}
+{-Q2-a-}
 bbox :: Shape -> BBox
-bbox (TD i j) -- width is that of the wider one; height is sum of heights
-    | ix >= jx = (ix, iy + jy)
-    | ix < jx = (jx, iy + jy) 
-    where (ix, iy) = bbox i
-          (jx, jy) = bbox j
-bbox (LR i j) -- width is sum of widths; height is that of the taller one
+bbox (TD a b)
+    | ax >= bx = (ax, ay + by) {-TD adds the heights (because it is top to down, in this case bigger changes-}
+    | ax < bx = (bx, ay + by)  {-same as last one except if the b is the bigger box in length-}
+    where (ax, ay) = bbox a
+          (bx, by) = bbox b
+bbox (LR a b) -- width is sum of widths; height is that of the taller one
     | iy >= jy = (ix + jx, iy)
     | iy < jy = (ix + jx, jy)
-    where (ix, iy) = bbox i
-          (jx, jy) = bbox j
+    where (ix, iy) = bbox a
+          (jx, jy) = bbox b
 bbox X = (1, 1)
 
 {- (b) Define a type checker for the shape language that assigns
@@ -135,18 +129,18 @@ bbox X = (1, 1)
 
 rect :: Shape -> Maybe BBox
 rect X = Just (1, 1)
-rect (TD i j) =            -- widths must match, and bbox has that width and 
-    case rect i of         -- its height is sum of heights. Else Nothing.
+rect (TD a b) =            -- widths must match, and bbox has that width and 
+    case rect a of         -- its height is sum of heights. Else Nothing.
         Nothing -> Nothing
-        Just (ix, iy) -> case rect j of 
+        Just (ix, iy) -> case rect b of 
                          Nothing -> Nothing
                          Just (jx, jy) -> case (ix == jx) of
                                           True -> Just (ix, iy + jy)
                                           False -> Nothing
-rect (LR i j) =            -- heights must match, and bbox is that height
-    case rect i of         -- with width the sum of widths. Else Nothing.
+rect (LR a b) =            -- heights must match, and bbox is that height
+    case rect a of         -- with width the sum of widths. Else Nothing.
         Nothing -> Nothing
-        Just (ix, iy) -> case rect j of 
+        Just (ix, iy) -> case rect b of 
                          Nothing -> Nothing
                          Just (jx, jy) -> case (iy == jy) of
                                           True -> Just (ix + jx, iy)
