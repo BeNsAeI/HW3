@@ -171,7 +171,7 @@ r5 = LR r4 r4 -- bbox (8, 4), rect Just (8, 4)
 f x y = if null x then [y] else x
 g x y = if not (null x) then [] else [y]
 
-{- (1) What are the types of f and g?
+(1) What are the types of f and g?
        f :: [a] -> a -> [a]
        g :: [a] -> b -> [b]
 
