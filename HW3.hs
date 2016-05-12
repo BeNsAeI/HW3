@@ -135,83 +135,76 @@ rect (LR a b) = case rect a of Nothing -> Nothing
                                                                Just (bx, by) -> case (ay == by) of True -> Just (ax + bx, ay) {-Similar to the definition above-}
                                                                                                    False -> Nothing
 
--- Test Shapes
-r1 = TD (LR X X) (LR X X) -- bbox (2,2), rect Just (2,2)
-r2 = TD (LR X X) X -- bbox (2,2), rect Nothing
-r3 = LR (TD r1 X) (LR r2 r2) -- bbox (6, 3), rect Nothing
-r4 = LR (TD r1 r1) (TD r1 r1) -- bbox (4, 4), rect Nothing
-r5 = LR r4 r4 -- bbox (8, 4), rect Just (8, 4)
-
-
 {---------------------------------------------------------------------------------------------------}
 {-Q3-}
 {-
 
-(a) Consider the functions f and g, which are given by the
-    following two function definitions.  
+{-Q3-a-}
+(1) 
+   f::[a] -> a -> [a] 
+   g::[a] -> b -> [b]
 
-f x y = if null x then [y] else x
-g x y = if not (null x) then [] else [y]
+(2)
+         f takes a list of values x and a value y of type a and return a list x or [y] (which have
+	to have the same type for the code to be correct since the return type needs to match)
 
-(1) What are the types of f and g?
-       f :: [a] -> a -> [a]
-       g :: [a] -> b -> [b]
+         g also takes a list x and any time y (we don't know what the y type is since it is not used)
+	and returns a list (empty or [y]) of same type (type of y) (emty list can be of any type)
 
-   (2) Explain why the functions have these types.
-       Since f will return either [y] or x, and x is a list, the elements
-       of x have to be of the same type as y. This is because, to the
-       best of our knowledge) Haskell can't return two different types
-       from a function.
+(3) Both type are general enough since they don't specify a specific type however there are two arguments here:
+    1- f could be more general because it has no restriction on the input and both x and y can be of any type as
+	   long as their type matches
 
-       While similar to f, g will return either [] or [y]. The subtle
-       difference here is that y now has no relation to x, since a list
-       is a phantom type. This make Haskell assume the second argument
-       to g is not the same type as the first.
+	2- g could be the more general function because it mentions types a and b whcih means at a given code it 
+	   supports more than 1 type
 
-   (3) Which type is more general?
-       Because both f and g will work with any types they are both
-       general, but one could make the argument that because g works
-       with more than one type, it is more general.
+(4) Haskell type inference
+    according to Haskell: (This contex is taken directly from Haskell website)
 
-   (4) Why do f and g have different types?
-       f and g have different types because of the magic of Haskell type
-       inference.
+**** Type inference is a feature of the type system which means that concrete types are deduced by the type system
+      whereever it is obvious.
+
+	  it means if we add a variable of type x to a literal y, the type system concludes that variable similar to that
+	  literal (y) could be represented with that specific literal's type (here x).
+	  so if we see a number 10, and specify it as an Int, everytime we use 10 it automatically assumes it is an Int
+	  (well 10 could be of ther types to , so haskell picks one that fits the type definition)
 
 
-
-(b) Find a (simple) definition for a function h that has the
-      following type.
+{---------------------------}
+{-Q3-b-} 
 
 h :: [b] -> [(a, b)] -> [b]
-h b _ = b
+h x _ = x
+OR
+h x (fst:list) = x
+h x [] = x
 
 
-(c) Find a (simple) definition for a function k that has the 
-       following type.
+{---------------------------}
+{-Q3-c-}
 
    k :: (a -> b) -> ((a -> b) -> a) -> b
 
-   We can not find a (simple) definition for function k, as there is no
-   way in Haskell to pattern match a function and its parameters at the
-   same time. Also since the function signature only defines b in the
-   terms of being the return type of another function, we can not deduce
-   anything about how b should be represented.
+   We can't. Such a definition cannot exist in Haskell.
+        Here, we are trying to match the parameter's pattern in whle we are also trying to match the pattern of
+   the function. Haskell, needs to know the parameter's pattern before hand.
 
-  (d) Can you define a function of type a -> b?
-      If yes, explain your definition. If not, explain why it is
-      so difficult.
+        Now lets assume that the parameters are alread handled, there still isn't a way for us to properly represent
+   the output of type b or ((a->b)->a)->b assuming one of which should be the output type.
 
-      No. Defining a function of type a -> b requires knowing something
-      about type b. Since we don't have that knowledge, we can not
-      define how something of type b should be represented. Anything we
-      might use would end up restricting what b might be, thus it would
-      not be of any type.
 
-      We could write:
-          j :: a -> b
-          j = j
+{---------------------------}
+{-Q3-d-}
 
-      But this is a circular definition and will never terminate, thus
-      we have not truly defined anything at all.
+No, there isn't a way for us to know what type b will contain. so there isn not a way for us to represent b.
+There is a way for us to cheat however,
+lets assume that type endlessLoopOfDeath has this propertye:
+endlessLoopOfDeath :: a -> b
 
+then we can simple create an endless loop of death (hence the name) that circles indefinitely
+
+we can simply say:
+endlessLoopOfDeath :: a -> b
+endlessLoopOfDeath = endlessLoopOfDeath
+ 
 -}
