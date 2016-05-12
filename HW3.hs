@@ -123,7 +123,6 @@ bbox (LR a b) | ay >= by  = (ax + bx, ay)
 bbox X = (1, 1)
 
 {-Q2-b-}
-{- 
 
 rect :: Shape -> Maybe BBox
 rect X = Just (1, 1)
