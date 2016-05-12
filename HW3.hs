@@ -76,23 +76,23 @@ rank _ _                         = Nothing
 
 {---------------------------}
 {-Q1-b-}
+{-Defining our type-}
 data Type = A Stack | TypeError 
 
 typeSafe :: Prog -> Bool
 typeSafe p = (rankP p) /= Nothing
 
+{-We process only if the type is safe otherwise we will return a type error similar to the example-}
 semStatTC :: Prog -> Type
-semStatTC p | typeSafe p = A (sem p [])
+semStatTC x | typeSafe p = A (sem x [])
             | otherwise  = TypeError
-{-
-  Question:
-      What is the new type of the function sem and why can the
-      function definition be simplified to have this type?
 
-  Answer:
-       The new type of sem is 'Prog -> D' where type DblStk = Stack -> Stack.
-       type DblStk can be simplified to no longer contain Maybe Stacks,
-       because the type checker handles all TypeErrors.
+{-
+What is the new type of the function sem and why can the function definition be simplified to have this type?
+
+-> The type of sem as we stated in the code above is Prog -> DblStk where DblStk is Stack -> Stack. Thereofre,
+type of sem is: Prog -> Stack -> Stack
+since we have a type checker , we do not need to worry about Maybe type anymore (it is taken care of by the typechecker)
 -}
 
 p1 = [LD 3, DUP, ADD, LD 5, SWAP] -- A [6, 5]
