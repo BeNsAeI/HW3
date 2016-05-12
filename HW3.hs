@@ -20,7 +20,7 @@ data Cmd = LD Int
          | INC
          | SWAP
          | POP Int
-		 deriving Show
+           deriving Show
 
 
 
@@ -78,7 +78,8 @@ rank _ _                         = Nothing
 {---------------------------}
 {-Q1-b-}
 {-Defining our type-}
-data Type = A Stack | TypeError 
+data Type = A Stack | TypeError deriving Show
+
 
 typeSafe :: Prog -> Bool
 typeSafe p = (rankP p) /= Nothing
@@ -87,6 +88,7 @@ typeSafe p = (rankP p) /= Nothing
 semStatTC :: Prog -> Type
 semStatTC x | typeSafe x = A (sem x [])
             | otherwise  = TypeError
+              deriving Show
 
 {-
 What is the new type of the function sem and why can the function definition be simplified to have this type?
@@ -110,6 +112,7 @@ p6 = [POP 1] -- TypeError
 data Shape = X
            | TD Shape Shape
            | LR Shape Shape
+           deriving Show
 
 type BBox = (Int, Int) -- (width, height) of bounding box
 
