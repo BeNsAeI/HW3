@@ -9,7 +9,7 @@
 
 module HW3 where
 
-{-Q1-}
+{-Q1-a-}
 
 {-Code provided by the assignment:-}
 type Prog = [Cmd]
@@ -32,7 +32,7 @@ type Rank = Int
 type CmdRank = (Int, Int)
 
 
-{- semCmd -}
+{-semCmd:-}
 semCmd :: Cmd -> DblStk
 semCmd (LD x)  list         = [x] ++ list        {-LD adds the element x to the front of List-}
 semCmd (ADD) (x0:x1:list)   = [x0+x1] ++ list    {-add puts the result of addition of the two top elements in the stackk to the top of the stack-}
@@ -45,12 +45,12 @@ semCmd _       _          = []                   {-Epty list for everything else
 
 
 
-{-Sementics-}
+{-Sementics:-}
 sem :: Prog -> DblStk
 sem [] x = x
 sem (fst:list) x = sem list (semCmd fst x)
 
-{-Ranks-}
+{-Ranks:-}
 rankC :: Cmd -> CmdRank
 rankC (LD _)  = (0, 1)
 rankC ADD     = (2, 1)
@@ -60,20 +60,22 @@ rankC INC     = (1, 1)
 rankC SWAP    = (2, 2)
 rankC (POP x) = (x, 0)
 
+{-This code is provided in the assignment:-}
 rankP :: Prog -> Maybe Rank
-rankP xs = rank xs 0
+rankP list = rank list 0
 
--- Rank a program
---
-rank :: Prog -> Rank -> Maybe Rank
-rank []     r | r >= 0     = Just r
-rank (x:xs) r | under >= 0 = rank xs (under+adds)
-              where (subs, adds) = rankC x
-                    under        = r - subs
-rank _      _ = Nothing
+{-Program raniking:-}
+type RnkType = Prog -> Rank -> Maybe Rank
+rank :: RnkType
+rank []     x | x >= 0           = Just x
+rank (fst:list) x | eq >= 0       = rank list (eq+additions)
+                                       where (subtracts, additions) = rankC fst
+                                              eq = r - subtracts
+rank _ _                         = Nothing
 
-{--- Part (b) ---}
 
+{---------------------------}
+{-Q1-b-}
 data Type = A Stack | TypeError 
 
 typeSafe :: Prog -> Bool
@@ -101,8 +103,9 @@ p5 = [DUP] -- TypeError
 p6 = [POP 1] -- TypeError
 
 
-{----------------------- Exercise 2 -------------------------}
 
+{---------------------------------------------------------------------------------------------------}
+{-Q2-}
 data Shape = X
            | TD Shape Shape
            | LR Shape Shape
@@ -153,9 +156,12 @@ r3 = LR (TD r1 X) (LR r2 r2) -- bbox (6, 3), rect Nothing
 r4 = LR (TD r1 r1) (TD r1 r1) -- bbox (4, 4), rect Nothing
 r5 = LR r4 r4 -- bbox (8, 4), rect Just (8, 4)
 
-{----------------------- Exercise 3 -------------------------}
 
-{- (a) Consider the functions f and g, which are given by the
+{---------------------------------------------------------------------------------------------------}
+{-Q3-}
+{-
+
+(a) Consider the functions f and g, which are given by the
     following two function definitions.  -}
 
 f x y = if null x then [y] else x
@@ -184,15 +190,17 @@ g x y = if not (null x) then [] else [y]
    (4) Why do f and g have different types?
        f and g have different types because of the magic of Haskell type
        inference.
--}
 
-{- (b) Find a (simple) definition for a function h that has the
+
+
+(b) Find a (simple) definition for a function h that has the
       following type. -}
 
 h :: [b] -> [(a, b)] -> [b]
 h b _ = b
 
-{- (c) Find a (simple) definition for a function k that has the 
+
+(c) Find a (simple) definition for a function k that has the 
        following type.
 
    k :: (a -> b) -> ((a -> b) -> a) -> b
