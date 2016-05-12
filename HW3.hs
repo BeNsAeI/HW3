@@ -84,7 +84,7 @@ typeSafe p = (rankP p) /= Nothing
 
 {-We process only if the type is safe otherwise we will return a type error similar to the example-}
 semStatTC :: Prog -> Type
-semStatTC x | typeSafe p = A (sem x [])
+semStatTC x | typeSafe x = A (sem x [])
             | otherwise  = TypeError
 
 {-
