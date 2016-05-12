@@ -126,20 +126,14 @@ bbox X = (1, 1)
 
 rect :: Shape -> Maybe BBox
 rect X = Just (1, 1)
-rect (TD a b) = case rect a of
-                                Nothing -> Nothing
-                                Just (ax, ay) -> case rect b of 
-                                                                 Nothing -> Nothing
-                                                                  Just (bx, by) -> case (ax == bx) of
-                                                                                                       True -> Just (ax, ay + by) {-Similar to the definition above-}
-                                                                                                       False -> Nothing
-rect (LR a b) = case rect a of
-                                 Nothing -> Nothing
-                                 Just (ax, ay) -> case rect b of 
-                                                                 Nothing -> Nothing
-                                                                 Just (bx, by) -> case (ay == by) of
-                                                                                                       True -> Just (ax + bx, ay) {-Similar to the definition above-}
-                                                                                                       False -> Nothing
+rect (TD a b) = case rect a of Nothing -> Nothing
+                               Just (ax, ay) -> case rect b of Nothing -> Nothing
+                                                               Just (bx, by) -> case (ax == bx) of True -> Just (ax, ay + by) {-Similar to the definition above-}
+                                                                                                   False -> Nothing
+rect (LR a b) = case rect a of Nothing -> Nothing
+                               Just (ax, ay) -> case rect b of Nothing -> Nothing
+                                                               Just (bx, by) -> case (ay == by) of True -> Just (ax + bx, ay) {-Similar to the definition above-}
+                                                                                                   False -> Nothing
 
 -- Test Shapes
 r1 = TD (LR X X) (LR X X) -- bbox (2,2), rect Just (2,2)
