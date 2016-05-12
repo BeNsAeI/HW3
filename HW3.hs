@@ -32,32 +32,25 @@ type Rank = Int
 type CmdRank = (Int, Int)
 
 
--- Semantics of individual Commands
+{- semCmd -}
 semCmd :: Cmd -> DblStk
-{-LD adds the element x to the front of List-}
-semCmd (LD x)  list         = [x] ++ list
-{-add puts the result of addition of the two top elements in the stackk to the top of the stack-}
-semCmd (ADD) (x0:x1:list)   = [x0+x1] ++ list
-{-add puts the result of multiplication of the two top elements in the stackk to the top of the stack-}
-semCmd (MULT) (x0:x1:list)  = [x0*x1] ++ list
-{-Duplicates the first element of the list (note, since the list variable does not include the the x0 we need it again-}
-semCmd (DUP) (x0:list)      = [x0,x0] ++ list
-{-increment the top by one and then add it to the list-}
-semCmd (INC) (x0:list)      = [succ x0] ++ list
-{-swap , swaps the two first elements of the list-}
-semCmd (SWAP) (x0:x1:list)  = (x1:x0:list)
-{-drop function removes an element from a list-}
-semCmd (POP x) list         = drop x list
-{-Epty list for everything else-}
-semCmd _       _          = []
+semCmd (LD x)  list         = [x] ++ list        {-LD adds the element x to the front of List-}
+semCmd (ADD) (x0:x1:list)   = [x0+x1] ++ list    {-add puts the result of addition of the two top elements in the stackk to the top of the stack-}
+semCmd (MULT) (x0:x1:list)  = [x0*x1] ++ list    {-add puts the result of multiplication of the two top elements in the stackk to the top of the stack-}
+semCmd (DUP) (x0:list)      = [x0,x0] ++ list    {-Duplicates the first element of the list (note, since the list variable does not include the the x0 we need it again)-}
+semCmd (INC) (x0:list)      = [succ x0] ++ list  {-increment the top by one and then add it to the list-}
+semCmd (SWAP) (x0:x1:list)  = (x1:x0:list)       {-swap , swaps the two first elements of the list-}
+semCmd (POP x) list         = drop x list        {-drop function removes an element from a list-}
+semCmd _       _          = []                   {-Epty list for everything else-}
 
--- Semantics of a Program
+
+
+{-Sementics-}
 sem :: Prog -> DblStk
-sem [] a = a
-sem (x:xs) a = sem xs (semCmd x a)
+sem [] x = x
+sem (fst:list) x = sem list (semCmd fst x)
 
--- Assign ranks to commands
---
+{-Ranks-}
 rankC :: Cmd -> CmdRank
 rankC (LD _)  = (0, 1)
 rankC ADD     = (2, 1)
@@ -65,7 +58,7 @@ rankC MULT    = (2, 1)
 rankC DUP     = (1, 2)
 rankC INC     = (1, 1)
 rankC SWAP    = (2, 2)
-rankC (POP a) = (a, 0)
+rankC (POP x) = (x, 0)
 
 rankP :: Prog -> Maybe Rank
 rankP xs = rank xs 0
