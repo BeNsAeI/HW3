@@ -112,14 +112,14 @@ type BBox = (Int, Int)
 {---------------------------}
 {-Q2-a-}
 bbox :: Shape -> BBox
-bbox (TD a b) | ax >= bx       = (ax, ay + by) {-TD adds the heights (because it is top to down, in this case bigger changes-}
-              | ax < bx        = (bx, ay + by)  {-same as last one except if the b is the bigger box in length-}
-                                  where (ax, ay) = bbox a
-                                        (bx, by) = bbox b
-bbox (LR a b) | ay >= by       = (ax + bx, ay)
-              | ay < by        = (ax + bx, by)
-                                  where (ax, ay) = bbox a
-                                        (bx, by) = bbox b
+bbox (TD a b) | ax >= bx  = (ax, ay + by) {-TD adds the heights (because it is top to down, in this case bigger changes-}
+              | ax < bx   = (bx, ay + by)  {-same as last one except if the b is the bigger box in length-}
+                             where (ax, ay) = bbox a
+                                   (bx, by) = bbox b
+bbox (LR a b) | ay >= by  = (ax + bx, ay)
+              | ay < by   = (ax + bx, by)
+                             where (ax, ay) = bbox a
+                                   (bx, by) = bbox b
 bbox X = (1, 1)
 
 {- (b) Define a type checker for the shape language that assigns
